@@ -1,0 +1,31 @@
+{
+  "name": "webex-meetings-quick-start",
+  "version": "1.0.0",
+  "description": "Webex Meetings Quick Start",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html --no-cache"
+  },
+  "repository": "https://github.com/WebexSamples/webex-meetings-quick-start",
+  "keywords": [],
+  "author": "Adam Weeks <adweeks@cisco.com>",
+  "license": "ISC",
+  "dependencies": {
+    "webex": "^2.60.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "crypto-browserify": "^3.12.0",
+    "os-browserify": "^0.3.0",
+    "parcel": "^2.12.0",
+    "punycode": "^1.4.1",
+    "querystring-es3": "^0.2.1",
+    "stream-browserify": "^3.0.0",
+    "string_decoder": "^1.3.0",
+    "url": "^0.11.0",
+    "util": "^0.12.3",
+    "vm-browserify": "^1.1.2"
+  }
+}
