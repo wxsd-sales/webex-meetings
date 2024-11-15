@@ -51,16 +51,16 @@ webex.meetings
     throw err;
   });
 async function bindButtonEvents(meeting) {
-  videoMuteOff = document.getElementById("video-mute-off");
-  videoMuteOn = document.getElementById("video-mute-on");
-  audioMuteOff = document.getElementById("audio-mute-off");
-  audioMuteOn = document.getElementById("audio-mute-on");
-  dropdownButton = document.getElementById("dropdown-button");
-  hideSelfView = document.getElementById("hide-self-view");
-  showSelfView = document.getElementById("show-self-view");
-  self = document.getElementById("self");
-  remoteView = document.getElementById("remote-view");
-  dropdown = document.getElementsByClassName("dropdown");
+  const videoMuteOff = document.getElementById("video-mute-off");
+  const videoMuteOn = document.getElementById("video-mute-on");
+  const audioMuteOff = document.getElementById("audio-mute-off");
+  const audioMuteOn = document.getElementById("audio-mute-on");
+  const dropdownButton = document.getElementById("dropdown-button");
+  const hideSelfView = document.getElementById("hide-self-view");
+  const showSelfView = document.getElementById("show-self-view");
+  const self = document.getElementById("self");
+  const remoteView = document.getElementById("remote-view");
+  const dropdown = document.getElementsByClassName("dropdown");
 
   document.getElementById("hangup").addEventListener("click", () => {
     window.location.href = "/hangup";
@@ -110,11 +110,11 @@ async function bindButtonEvents(meeting) {
 }
 
 async function bindMeetingEvents(meeting) {
-  selfView = document.getElementById("self-view");
-  remoteViewVideo = document.getElementById("remote-view-video");
-  remoteViewAudio = document.getElementById("remote-view-audio");
-  buttonsContainer = document.getElementById("buttons-container");
-  loadingContainer = document.getElementById("loading-container");
+  const selfView = document.getElementById("self-view");
+  const remoteViewVideo = document.getElementById("remote-view-video");
+  const remoteViewAudio = document.getElementById("remote-view-audio");
+  const buttonsContainer = document.getElementById("buttons-container");
+  const loadingContainer = document.getElementById("loading-container");
   // meeting.on("error", (err) => {
   //   console.error(err);
   // });
@@ -148,7 +148,7 @@ async function bindMeetingEvents(meeting) {
   // document.getElementById("hangup").addEventListener("click", () => {
   //   meeting.leave();
   // });
-  meeting.on("error", (error) => handleError(error, "Meeting Error"));
+  meeting.on("error", (error) => console.log(error, "Meeting Error"));
 
   meeting.on("media:ready", (media) => {
     if (!media) return;
@@ -241,7 +241,7 @@ async function joinMeeting(meeting) {
       });
     });
   } catch (error) {
-    handleError(error, "Join Meeting Error");
+    console.log(error, "Join Meeting Error");
     throw error;
   }
 }
