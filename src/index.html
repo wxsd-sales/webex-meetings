@@ -9,9 +9,13 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     />
+    <script
+      src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+      integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <!-- Media container for video and audio -->
     <section class="hero is-fullheight is-bold">
       <div class="video-view" style="margin-bottom: -0.75rem">
         <div id="self">
@@ -72,6 +76,27 @@
             </button>
           </div>
 
+          <div id="wkflw-button" class="mr-2">
+            <button
+              id="client-connect"
+              class="button is-rounded is-dark is-small"
+              alt="Client Connect"
+              type="button"
+              style="display: none"
+            >
+              <img src="./assets/link-solid.svg" />Client Connect
+            </button>
+            <button
+              id="agent-connect"
+              class="button is-rounded is-dark is-small"
+              alt="Agent Connect"
+              type="button"
+              style="display: none"
+            >
+              <img src="./assets/link-solid.svg" />Agent Connect
+            </button>
+          </div>
+
           <div class="dropdown is-up mr-2">
             <div class="dropdown-trigger">
               <button
@@ -127,7 +152,12 @@
     </section>
 
     <!-- JavaScript file -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js" integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"
+      integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script type="module" src="./index.js"></script>
   </body>
 </html>

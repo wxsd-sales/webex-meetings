@@ -3,11 +3,8 @@
   "version": "1.0.0",
   "description": "Webex Meetings",
   "scripts": {
-    "build:parcel": "rm -rf dist && parcel build src/index.html --public-url ./ --no-cache",
     "build": "del -rf dist && npx webpack --config webpack.config.js",
-    "dev": "nodemon server.js",
-    "start": "parcel index.html --open",
-    "prod": "parcel index.html",
+    "start": "nodemon server.js",
     "deploy:pages": "gh-pages -d dist/",
     "deploy": "npm run build && npm run deploy:pages",
     "watch": "webpack --watch"
@@ -22,12 +19,15 @@
     "axios": "^1.7.9",
     "babel-loader": "^9.2.1",
     "buffer": "^6.0.3",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
+    "https": "^1.0.0",
     "mini-css-extract-plugin": "^2.9.2",
     "node-polyfill-webpack-plugin": "^4.1.0",
     "process": "^0.11.10",
     "querystring": "^0.2.1",
+    "socket.io": "^4.8.1",
     "webex": "^2.60.1"
   },
   "targets": {
