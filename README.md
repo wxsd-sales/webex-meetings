@@ -27,8 +27,14 @@ Open a new terminal window and follow the instructions below to setup the projec
    ```
    npm install
    ```
+   ```
+   npm install nodemon
+   ```
 
-3. Start the application using:
+3. Build and then Start the application using:
+   ```
+   npm run build
+   ```
    ```
    npm run start
    ```
