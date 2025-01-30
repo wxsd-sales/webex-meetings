@@ -30,7 +30,6 @@ Open a new terminal window and follow the instructions below to setup the projec
    ```
    npm install nodemon
    ```
-
 3. Build and then Start the application using:
    ```
    npm run build
@@ -38,8 +37,13 @@ Open a new terminal window and follow the instructions below to setup the projec
    ```
    npm run start
    ```
-   To run this project project on Docker, make sure to have Docker installed on your Windows or linux system, add Docker file to the project folder, build and run it to have the project run in docker before deploying it to any of the cloud platforms.
-
+4. To run this project on Docker, make sure to have Docker installed on your Windows or linux system, and build and run Docker file using:
+   ```
+   docker build -t webex-meetings-server .
+   ```
+   ```
+   docker run -i -p 3000:3000 -t webex-meetings-server
+   ```
 <!-- LICENSE -->
 
 ## License
