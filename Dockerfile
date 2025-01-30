@@ -10,6 +10,6 @@ RUN npm install nodemon
 COPY . .
 
 #overwrite default environment variables
-# COPY bdm.env .env
+COPY bdm.env .env
 CMD [ "npm", "run", "build" ]
 CMD [ "npm", "start" ]

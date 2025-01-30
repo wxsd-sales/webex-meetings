@@ -4,6 +4,12 @@ const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
 const { createServer } = require("node:http");
+const cron = require("node-cron");
+
+cron.schedule("0 0 */13 * *", () => {
+  console.log("Generating new access token");
+  getAccessToken();
+});
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
@@ -12,6 +18,8 @@ const app = express();
 // const io = require("socket.io")(http);
 const server = createServer(app);
 const { Server } = require("socket.io");
+const getDestLinks = require("./src/utils/get-dest-links.js");
+const getAccessToken = require("./src/utils/get-access-token.js");
 const io = new Server(server, {
   cors: {
     origin: "https://socketeer.glitch.me/",
@@ -30,17 +38,26 @@ app.use(express.json());
 
 app.use(cors());
 
-// app.get("/hangup", (req, res) => {
-//   console.log("hangup");
-// });
-
-app.post("/task-routing", (req, res) => {
+app.post("/task-routing", async (req, res) => {
   console.log(req.body);
-  const { access_token, destination } = req.body;
+  const details = await getDestLinks();
+  var clientMeetingLink =
+    "?access_token=" +
+    details.access_token +
+    "&destination=" +
+    details.joinLink +
+    "&site=client";
+  var hostMeetingLink =
+    "?access_token=" +
+    details.access_token +
+    "&destination=" +
+    details.startLink +
+    "&site=host";
+  const { name, guid, language } = req.body;
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/xml");
   myHeaders.append("Cookie", "JSESSIONID=7430280F23446A3C75D2533EEA6AFF2B");
-
+  // const destLinks = await getDestLinks();
   const raw = `<Task>
    <name>NewTaskName</name>
    <title>NewTaskTitle</title>
@@ -56,15 +73,19 @@ app.post("/task-routing", (req, res) => {
    <variables>
     <variable> 
       <name>cv_1</name> 
-      <value>12345</value> 
+      <value>${guid}</value> 
     </variable>
     <variable> 
-      <name>user_user_videoToken</name> 
-      <value>${access_token}</value> 
+      <name>cv_2</name> 
+      <value>${name}</value> 
     </variable>
     <variable> 
-      <name>user_user_videoDestination</name> 
-      <value>${destination}</value> 
+      <name>cv_3</name> 
+      <value>${language}</value> 
+    </variable>
+    <variable> 
+      <name>user_user_user_meeting_link</name> 
+      <value>${hostMeetingLink}</value> 
     </variable>
    </variables>
 </Task>`;
@@ -76,10 +97,11 @@ app.post("/task-routing", (req, res) => {
     // redirect: "follow"
   };
 
+  //prod server: https://xrdclqccesmr01.hcaqa.corpadqa.net
   fetch("https://sm1.dcloud.cisco.com/ccp/task/feed/100080", requestOptions)
     .then((response) => response.text())
     .then((result) => {
-      res.send(result);
+      res.send(clientMeetingLink);
       console.log(result);
     })
     .catch((error) => console.error(error));
