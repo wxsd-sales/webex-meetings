@@ -1,4 +1,5 @@
 const axios = require("axios");
+require("dotenv").config();
 const getAccessToken = require("./get-access-token.js");
 async function getDestLinks() {
   const access_token = await getAccessToken();
@@ -31,6 +32,29 @@ async function getDestLinks() {
         createStartLinkAsWebLink: true,
         joinDirectly: false,
       };
+      const connectData = {
+        meetingId: r.data.id,
+        meetingNumber: r.data.meetingNumber,
+        password: r.data.password,
+        phoneAndVideoSystemPassword: r.data.phoneAndVideoSystemPassword,
+        start: r.data.start,
+        end: r.data.end,
+        hostKey: r.data.hostKey,
+        hostEmail: r.data.hostEmail,
+        webLink: r.data.webLink,
+        telephony: r.data.telephony,
+      };
+      console.log("meeting data", r.data);
+      console.log("connect data", connectData);
+
+      await axios
+        .post(process.env.WEBEX_CONNECT_URL, connectData)
+        .then((res) => {
+          console.log("Connect resp", res);
+        })
+        .catch((err) => {
+          console.log("Connect err", err);
+        });
 
       return axios
         .post(`https://webexapis.com/v1/meetings/join`, linkdata, {
@@ -40,7 +64,8 @@ async function getDestLinks() {
             Authorization: `Bearer ${access_token}`,
           },
         })
-        .then((linkr) => {
+        .then(async (linkr) => {
+          console.log("linkdata", linkdata);
           console.log("link data", linkr.data);
           const joinLink = linkr.data.joinLink;
           const startLink = linkr.data.startLink;
@@ -50,13 +75,58 @@ async function getDestLinks() {
             startLink,
           };
           return details;
+          // const clientBody = {
+          //   subject: "HCAClient",
+          //   displayName: "HCAClient",
+          // };
+          // const agentBody = {
+          //   subject: "HCAAgent",
+          //   displayName: "HCAAgent",
+          // };
+          // return axios
+          //   .post(`https://webexapis.com/v1/guests/token`, clientBody, {
+          //     //create join and start links
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //       Authorization: `Bearer ${access_token}`,
+          //     },
+          //   })
+          //   .then(async (r) => {
+          //     //   console.log("resp", r.data);
+          //     const clientToken = r.data.accessToken;
+          //     return axios
+          //       .post(`https://webexapis.com/v1/guests/token`, agentBody, {
+          //         //create join and start links
+          //         headers: {
+          //           "Content-Type": "application/json",
+          //           Authorization: `Bearer ${access_token}`,
+          //         },
+          //       })
+          //       .then(async (r) => {
+          //         //   console.log("resp", r.data);
+          //         const agentToken = r.data.accessToken;
+          //         const details = {
+          //           clientToken,
+          //           agentToken,
+          //           joinLink,
+          //           startLink,
+          //         };
+          //         return details;
+          //       })
+          //       .catch((error) => {
+          //         console.log("get guest token error", error);
+          //       });
+          //   })
+          //   .catch((error) => {
+          //     console.log("get guest token error", error);
+          //   });
         })
         .catch((err) => {
-          console.log("err", err);
+          console.log("err meetings join", err);
         });
     })
     .catch((err) => {
-      console.log("err", err);
+      console.log("err meetings create", err);
     });
 }
 module.exports = getDestLinks;

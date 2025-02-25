@@ -5,7 +5,7 @@ const https = require("https");
 const fs = require("fs");
 const { createServer } = require("node:http");
 const cron = require("node-cron");
-
+require("dotenv").config();
 cron.schedule("0 0 */13 * *", () => {
   console.log("Generating new access token");
   getAccessToken();
@@ -52,7 +52,8 @@ app.post("/task-routing", async (req, res) => {
     details.access_token +
     "&destination=" +
     details.startLink +
-    "&site=host";
+    "&site=agent";
+  console.log("meeting link", hostMeetingLink);
   const { name, guid, language } = req.body;
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/xml");
@@ -62,13 +63,12 @@ app.post("/task-routing", async (req, res) => {
    <name>NewTaskName</name>
    <title>NewTaskTitle</title>
    <description>NewTaskdescription</description>
-   <scriptSelector>CumulusTask</scriptSelector>
+   <scriptSelector>video_registration</scriptSelector>
    <requeueOnRecovery>true</requeueOnRecovery>
    <!-- Indicates if the contact will be re-queued/discarded on 
    SM failure recovery-->
    <tags>
-      <tag>tag1</tag>
-      <tag>tag2</tag>
+      <tag>video_registration</tag>
    </tags>
    <variables>
     <variable> 
@@ -83,10 +83,14 @@ app.post("/task-routing", async (req, res) => {
       <name>cv_3</name> 
       <value>${language}</value> 
     </variable>
-    <variable> 
-      <name>user_user_user_meeting_link</name> 
-      <value>${hostMeetingLink}</value> 
-    </variable>
+ <variable>
+         <name>user_user_user_videoDestination</name>
+         <value>${details.startLink}</value>
+      </variable>
+      <variable>
+         <name>user_user_user_videoToken</name>
+         <value>${details.access_token}</value>
+      </variable> 
    </variables>
 </Task>`;
 
@@ -96,9 +100,9 @@ app.post("/task-routing", async (req, res) => {
     body: raw,
     // redirect: "follow"
   };
+  // res.send(clientMeetingLink);
 
-  //prod server: https://xrdclqccesmr01.hcaqa.corpadqa.net
-  fetch("https://sm1.dcloud.cisco.com/ccp/task/feed/100080", requestOptions)
+  fetch(process.env.FINESSE_URL, requestOptions)
     .then((response) => response.text())
     .then((result) => {
       res.send(clientMeetingLink);

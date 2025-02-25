@@ -1,6 +1,8 @@
 import "./style.css";
+require("dotenv").config();
 const { enableDrag } = require("./selfview");
 var socket = io();
+const axios = require("axios");
 console.log("socketio", socket);
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -71,8 +73,39 @@ async function bindButtonEvents(meeting) {
   const agentConnect = document.getElementById("agent-connect");
   const dropdown = document.getElementsByClassName("dropdown");
 
+  const meetingDest = meeting.destination;
+
   document.getElementById("hangup").addEventListener("click", async () => {
-    window.location.href = "/hangup";
+    // window.location.href = "/hangup";
+    console.log("hangup clicked");
+    await axios
+      .get(`https://webexapis.com/v1/meetings?webLink=${meetingDest}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${myAccessToken}`,
+        },
+      })
+      .then(async (res) => {
+        console.log("res", res);
+        const id = res.data.items[0].id;
+        console.log("id", id);
+        const date = new Date();
+        const connectData = {
+          meetingId: id,
+          meetingEnded: date,
+        };
+        await axios
+          .post(process.env.WEBEX_CONNECT_URL, connectData)
+          .then((res) => {
+            console.log("Connect resp", res);
+          })
+          .catch((err) => {
+            console.log("Connect err", err);
+          });
+      })
+      .catch((err) => {
+        console.log("list meetings err", err);
+      });
     await meeting.endMeetingForAll();
     await meeting.getMembers().then((members) => {
       console.log("members", members);
@@ -166,6 +199,8 @@ async function bindMeetingEvents(meeting) {
   });
 
   meeting.on("media:stopped", (media) => {
+    console.log("meeting stopped");
+    window.location.href = "/hangup";
     const element =
       media.type === "local"
         ? selfView
