@@ -91,11 +91,16 @@ async function bindButtonEvents(meeting) {
         console.log("id", id);
         const date = new Date();
         const connectData = {
+          accessToken: myAccessToken,
           meetingId: id,
           meetingEnded: date,
         };
+        console.log("connectData", connectData);
         await axios
-          .post(process.env.WEBEX_CONNECT_URL, connectData)
+          .post(
+            "https://hooks.us.webexconnect.io/events/P3RGOWXKZY",
+            connectData
+          )
           .then((res) => {
             console.log("Connect resp", res);
           })

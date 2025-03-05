@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const https = require("https");
+const axios = require("axios");
 const fs = require("fs");
 const { createServer } = require("node:http");
 const cron = require("node-cron");
@@ -37,6 +38,61 @@ app.use(express.static(path.join(__dirname, "dist")));
 app.use(express.json());
 
 app.use(cors());
+
+app.post("/end-meeting", async (req, res) => {
+  console.log(req.body);
+  const { accessToken, destination } = req.body;
+  await axios
+    .get(`https://webexapis.com/v1/meetings?webLink=${destination}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then(async (resp) => {
+      const id = resp.data.items[0].id;
+      console.log("id", id);
+      await axios
+        .get(`https://webexapis.com/v1/meetingParticipants?meetingId=${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(async (resp) => {
+          console.log("res", resp.data);
+          resp.data.items.forEach(async (participant) => {
+            const data = {
+              expel: true,
+            };
+            await axios
+              .put(
+                `https://webexapis.com/v1/meetingParticipants/${participant.id}`,
+                data,
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                }
+              )
+              .then(async (resp) => {
+                console.log("expel res", resp.data);
+                res.send("Meeting ended");
+              })
+              .catch((error) => {
+                console.log("expel error", error);
+              });
+          });
+        })
+        .catch((error) => {
+          console.log("get participants details", error);
+        });
+    })
+    .catch((error) => {
+      console.log("get meeting details", error);
+    });
+});
 
 app.post("/task-routing", async (req, res) => {
   console.log(req.body);
