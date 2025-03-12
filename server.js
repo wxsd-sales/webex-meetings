@@ -78,6 +78,24 @@ app.post("/end-meeting", async (req, res) => {
               )
               .then(async (resp) => {
                 console.log("expel res", resp.data);
+                const date = new Date();
+                const connectData = {
+                  accessToken: accessToken,
+                  meetingId: id,
+                  meetingEnded: date,
+                };
+                console.log("connectData", connectData);
+                await axios
+                  .post(
+                    "https://hooks.us.webexconnect.io/events/P3RGOWXKZY",
+                    connectData
+                  )
+                  .then((res) => {
+                    console.log("Connect resp", res);
+                  })
+                  .catch((err) => {
+                    console.log("Connect err", err);
+                  });
                 res.send("Meeting ended");
               })
               .catch((error) => {
@@ -97,6 +115,7 @@ app.post("/end-meeting", async (req, res) => {
 app.post("/task-routing", async (req, res) => {
   console.log(req.body);
   const details = await getDestLinks();
+  console.log(details);
   var clientMeetingLink =
     "?access_token=" +
     details.access_token +

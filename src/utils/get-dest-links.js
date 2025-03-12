@@ -12,6 +12,7 @@ async function getDestLinks() {
     title: "Webex Meeting",
     start: currentDateTime,
     end: futureDateTime,
+    siteUrl: "g2ghca.webex.com",
   };
   console.log("start time", currentDateTime);
   console.log("end time", futureDateTime);
@@ -43,6 +44,7 @@ async function getDestLinks() {
         hostEmail: r.data.hostEmail,
         webLink: r.data.webLink,
         telephony: r.data.telephony,
+        accessToken: access_token,
       };
       console.log("meeting data", r.data);
       console.log("connect data", connectData);

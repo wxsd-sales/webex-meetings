@@ -72,6 +72,7 @@ async function bindButtonEvents(meeting) {
   const clientConnect = document.getElementById("client-connect");
   const agentConnect = document.getElementById("agent-connect");
   const dropdown = document.getElementsByClassName("dropdown");
+  const add = document.getElementById("add");
 
   const meetingDest = meeting.destination;
 
@@ -164,6 +165,42 @@ async function bindButtonEvents(meeting) {
     hideSelfView.style.display = "";
     showSelfView.style.display = "none";
   });
+  add.addEventListener("click", async () => {
+    await axios
+      .get(`https://webexapis.com/v1/meetings?webLink=${meetingDest}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${myAccessToken}`,
+        },
+      })
+      .then(async (res) => {
+        const id = res.data.items[0].id;
+        const addData = {
+          meetingId: id,
+          address: "+15028216519",
+          addressType: "phoneNumber",
+          displayName: "Kris Krake",
+        };
+        await axios
+          .post(
+            "https://webexapis.com/v1/meetingParticipants/callout",
+            addData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${myAccessToken}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log("res", res);
+          })
+          .catch((err) => {
+            console.log("err", err);
+          });
+      });
+    // meeting.invite(invitee);
+  });
   dropdownButton.addEventListener("click", () => {
     // dropdown.classList.toggle("is-active");
     Array.from(dropdown).forEach((drop) => {
@@ -187,6 +224,8 @@ async function bindMeetingEvents(meeting) {
   meeting.on("media:ready", (media) => {
     if (!media) return;
 
+    meeting.startRecording();
+
     const element =
       media.type === "local"
         ? selfView
@@ -205,6 +244,7 @@ async function bindMeetingEvents(meeting) {
 
   meeting.on("media:stopped", (media) => {
     console.log("meeting stopped");
+    meeting.stopRecording();
     window.location.href = "/hangup";
     const element =
       media.type === "local"
@@ -255,3 +295,4 @@ async function joinMeeting(meeting) {
     throw error;
   }
 }
+webex.meetings.unregister();
