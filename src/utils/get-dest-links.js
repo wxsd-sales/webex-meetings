@@ -4,8 +4,14 @@ const getAccessToken = require("./get-access-token.js");
 async function getDestLinks() {
   const access_token = await getAccessToken();
   console.log("access_token in getDestLinks", access_token);
-  const currentDateTime = new Date().toISOString();
+  // const currentDateTime = new Date().toISOString();
   const currentDate = new Date();
+  const currentDateTime = new Date();
+  const newDateTime = new Date(
+    currentDateTime.getTime() + 5 * 60000
+  ).toISOString();
+
+  console.log(newDateTime);
   currentDate.setHours(currentDate.getHours() + 1);
   const futureDateTime = currentDate.toISOString();
   const payload = {
