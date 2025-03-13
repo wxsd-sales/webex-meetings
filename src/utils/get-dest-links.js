@@ -8,7 +8,7 @@ async function getDestLinks() {
   const currentDate = new Date();
   const currentDateTime = new Date();
   const newDateTime = new Date(
-    currentDateTime.getTime() + 5 * 60000
+    currentDateTime.getTime() + 1 * 60000
   ).toISOString();
 
   console.log(newDateTime);
