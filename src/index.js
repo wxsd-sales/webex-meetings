@@ -175,9 +175,10 @@ async function bindButtonEvents(meeting) {
       })
       .then(async (res) => {
         const id = res.data.items[0].id;
+        //+15028216519
         const addData = {
           meetingId: id,
-          address: "+15028216519",
+          address: "+16479645923",
           addressType: "phoneNumber",
           displayName: "Kris Krake",
         };
@@ -245,6 +246,7 @@ async function bindMeetingEvents(meeting) {
   meeting.on("media:stopped", (media) => {
     console.log("meeting stopped");
     meeting.stopRecording();
+    webex.meetings.unregister();
     window.location.href = "/hangup";
     const element =
       media.type === "local"
@@ -295,4 +297,3 @@ async function joinMeeting(meeting) {
     throw error;
   }
 }
-webex.meetings.unregister();

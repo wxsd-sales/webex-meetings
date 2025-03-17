@@ -8,19 +8,19 @@ async function getDestLinks() {
   const currentDate = new Date();
   const currentDateTime = new Date();
   const newDateTime = new Date(
-    currentDateTime.getTime() + 1 * 60000
+    currentDateTime.getTime() + 2 * 60000
   ).toISOString();
 
-  console.log(newDateTime);
+  console.log(currentDateTime);
   currentDate.setHours(currentDate.getHours() + 1);
   const futureDateTime = currentDate.toISOString();
   const payload = {
     title: "Webex Meeting",
-    start: currentDateTime,
+    start: newDateTime,
     end: futureDateTime,
     siteUrl: "g2ghca.webex.com",
   };
-  console.log("start time", currentDateTime);
+  console.log("start time", newDateTime);
   console.log("end time", futureDateTime);
 
   return axios
