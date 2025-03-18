@@ -39,6 +39,10 @@ app.use(express.json());
 
 app.use(cors());
 
+app.get("/hangup", (req, res) => {
+  res.send("Call has been ended");
+});
+
 app.post("/end-meeting", async (req, res) => {
   console.log(req.body);
   const { accessToken, destination } = req.body;

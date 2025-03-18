@@ -121,9 +121,11 @@ async function bindButtonEvents(meeting) {
   if (site == "client") {
     clientConnect.style.display = "none";
     agentConnect.style.display = "";
+    add.style.display = "none";
   } else if (site == "agent") {
     clientConnect.style.display = "";
     agentConnect.style.display = "none";
+    add.style.display = "";
   }
   clientConnect.addEventListener("click", () => {
     console.error("workflow button pushed");
